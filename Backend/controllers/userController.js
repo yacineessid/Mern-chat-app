@@ -1,6 +1,7 @@
 const asyncHandler = require('express-async-handler');
 const User = require('../models/userSchema');
-const generateToken = require('../config/genrateToken');
+// const generateToken = require('../config/generateToken');
+const jwt = require('jsonwebtoken');
 
 const registerUser = asyncHandler(async (req, res) => {
   const { name, email, password, pic } = req.body;
@@ -19,14 +20,19 @@ const registerUser = asyncHandler(async (req, res) => {
     password,
     pic,
   });
+
   if (user) {
+    const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: '30d',
+    });
     res.status(200).json({
       _id: user.id,
       name: user.name,
       email: user.email,
       pic: user.pic,
-      token: generateToken(user._id),
+      token: token,
     });
+    console.log(generateToken(user._id),'tokeeeeenn');
   } else {
     res.status(400);
     throw new Error('User not found');
@@ -40,14 +46,17 @@ const authUser=asyncHandler(async(req,res)=>{
 
     if(user && (await user.matchPassword(password))){
       console.log(`User`, user.matchPassword(password));
-
+      const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
+        expiresIn: '30d',
+      });
         res.json({
             _id: user.id,
             name: user.name,
             email: user.email,
-            pic: user.pic,F
-            token: generateToken(user._id),
+            pic: user.pic,
+            token: token
         })
+    console.log(generateToken(user._id),'tokeeeeenn');
 
     }  
     else{
