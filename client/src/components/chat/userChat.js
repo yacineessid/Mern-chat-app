@@ -2,13 +2,15 @@ import { Stack } from "react-bootstrap";
 import { useFetchRecipientUser } from "../../hooks/userFetchRecipient";
 import avatar from '../../assets/avatar.svg'
 function UserChat({ chat, user }) {
-  const [recipientUser, error] = useFetchRecipientUser(chat, user);
+  const {recipientUser} = useFetchRecipientUser(chat, user);
+  console.log(recipientUser,'userrrrrr');
   return<Stack
   direction="horizontal"
   gap={3}
   className="user-card align-items-center p-2 justify-content-between"
   role="button"
 >
+  
   <div className="d-flex align-items-center">
     <img src={avatar} height="35px" alt="User Avatar" />
     <div className="ml-2 text-content">
