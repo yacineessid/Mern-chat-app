@@ -7,6 +7,7 @@ export const useFetchRecipientUser = (chat, user) => {
   const [recipientError, setError] = useState(null);
   const recipientId = chat?.members.find((id) => id !== user._id);
 
+useEffect(() => {
   const getUser = async () => {
     if (!recipientId) {
       return null;
@@ -14,7 +15,7 @@ export const useFetchRecipientUser = (chat, user) => {
 
     try {
       let res = await getRequest(`/user/${recipientId}`);
-      console.log(res, 'API response'); // Log the API response
+
       if (res.error) {
         setError(res.error);
       } else {
@@ -24,9 +25,8 @@ export const useFetchRecipientUser = (chat, user) => {
       console.error('Error fetching user:', error);
     }
   };
-  useEffect(() => {
-    getUser()
-    
-  }, [recipientId]);
-  }
- 
+
+  getUser();
+}, [recipientId]);
+return {recipientUser}
+}
